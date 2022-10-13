@@ -26,4 +26,4 @@ yarn-error.log*
 ../portfolio/
 
 # Text Editors and IDES
-.vscode
+/.vscode
