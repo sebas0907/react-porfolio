@@ -1,8 +1,8 @@
+//For security reasons, the form e-mail client has been deactivated. Messages are only sent to the MongoDB database.
 const express = require('express');
 const path = require('path');
 const app = express();
 const cors = require('cors');
-const nodemailer = require('nodemailer');
 require('dotenv').config({path: __dirname+'/.env'})
 
 app.use(express.urlencoded({extended: true}));
@@ -19,7 +19,7 @@ mongoose.connect(mySecret, { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 const state = db.readyState;
 // a state = 2 means the DB is connecting
-console.log(state===2?"connecting to database...":"connection failed!");
+console.log(state===2?"database connected":"connection failed!");
 //crete schema and model for incoming messages
 const Schema = mongoose.Schema;
 
@@ -39,14 +39,6 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.get('/', (req, res)=> {
     res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
-//let's add some transport to send an automatic email reply
-const mailTransport = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: process.env['MAIL_USER'],
-        pass: process.env['MAIL_TOKEN']
-    }
-});
 
 app.post('/posts',(req,res)=>{
 
@@ -61,18 +53,6 @@ app.post('/posts',(req,res)=>{
     document.save((err,data)=>{
         if (err) console.log(err);
         console.log(data);
-    });
-
-    const reply = '<h2 style="font-family: sans-serif; color: purple">Thank you for your message!</h2>'
-    +'<p style="font-family: sans-serif">Please do not reply to this Email. I will be in touch as soon as possible to attend to your inquiry.<br><br>Kind regards,<br><br>Sebastian Arenas</p><br>'
-    +'<p style="font-family: courier">E-Mail: sebasa_p@outlook.com<br>https://nameless-lowlands-50854.herokuapp.com/</p>';
-    
-    mailTransport.sendMail({
-        from: '"Sebastian Arenas"'+'<'+process.env.MAIL_USER+'>',
-        to: email,
-        subject: 'Your Email Confirmation',
-        html: 'Hello '+name+','+reply}, (err)=>{
-        if (err){console.log(err);}
     });
 
     res.redirect(303,'/');

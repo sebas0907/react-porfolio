@@ -12,25 +12,28 @@
 // limitations under the License.
 // =============================================================================
 
-import { names } from './data';
+import { names,labels } from './data';
 
 const tf = require('@tensorflow/tfjs');
 
-export function yoloV5(){
-    if(!(this instanceof ObjectDetection)) return new ObjectDetection();
+export function yoloV5(path){
+    if(!(this instanceof ObjectDetection)) return new ObjectDetection(path);
 }
 
 export class ObjectDetection {
 
-    constructor(){
+    constructor(path){
         //path to your custom yolov5 model
-        this.modelPath = '/web_models/model_1/model.json';
+        this.modelPath = `/web_models/${path}/model.json`;
+        //set proper list of categories for each model
+        path === "model_3" ? this.categories = labels : this.categories = names;
+        
     }
 
     async load() {
 
         this.model = await tf.loadGraphModel(this.modelPath);
-        /*
+        //Warm up the model for faster inference:
         const zeroTensor = tf.zeros([1,640,640,3], 'float32');
         const result = await this.model.executeAsync(zeroTensor);
 
@@ -39,8 +42,8 @@ export class ObjectDetection {
         result.map(t=>t.dispose());
 
         zeroTensor.dispose();
-        */
-        console.log("Model loaded!");
+        
+        console.log(this.modelPath, " loaded!");
 
         return this
     }
@@ -68,10 +71,12 @@ export class ObjectDetection {
         tf.dispose(result);
 
         const prevBackend = tf.getBackend();
-        
+        /*
         if (tf.getBackend() === 'webgl'){
             tf.setBackend('cpu');
         }
+        */
+        tf.setBackend('webgl');
         
         if(prevBackend !== tf.getBackend()){
             tf.setBackend(prevBackend);
@@ -99,8 +104,8 @@ export class ObjectDetection {
             bbox[1]=y1;
             bbox[2]=w;
             bbox[3]=h;
-    
-            const klass = names[indices[i]];
+            const klass = this.categories[indices[i]];
+            //const klass = names[indices[i]];
             const score = scores[i].toFixed(2);
     
             objects.push({

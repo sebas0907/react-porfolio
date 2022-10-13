@@ -13,30 +13,18 @@ export default function Projects() {
                   <CodeIcon />
                   <h1 className="sm:text-4xl text-3xl font-medium title-font mb-4 text-white">Apps I've Built</h1>
                   <p className="lg:w-2/3 mx-auto leading-relaxed text-base">
-              Here you can find a very few samples of my work (at least the fully working ones) in few lines of code.</p>
+              Here you can find some funny apps (at least the fully working ones) in few lines of code.</p>
               </div>
           <div className="flex flex-wrap -m-4">
-            {projects.map((project) => (
+            {projects.map((project,i) => (
               <a
                 href={project.link}
-                key={project.images}
-                //target={ project.subtitle === "Python" ? "_blank":"_self" }
+                key={i}
                 target="_blank"
                 rel="noreferrer"
                 className="sm:w-1/2 w-100 p-4">
                 <div className="flex relative">
-                  <img
-                    alt="gallery"
-                    className="absolute inset-y-0 left-0 h-full w-1/2"
-                    src={project.images[0]}
-                  />
-                  <img
-                    alt="gallery"
-                    //w-full h-full object-cover object-center
-                    className="absolute inset-y-0 right-0 h-full w-1/2"
-                    src={project.images[1]}
-                  />
-                  <div className="px-8 py-10 relative z-10 w-full border-4 border-gray-400 bg-indigo-900 md:opacity-0 hover:opacity-100">
+                  <div className="px-8 py-10 relative z-10 w-full border-4 border-gray-400 bg-indigo-900 hover:opacity-80">
                     <h2 className="tracking-widest text-sm title-font font-medium text-green-400 mb-1">
                       {project.subtitle}
                     </h2>
