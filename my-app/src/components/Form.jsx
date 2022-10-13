@@ -31,7 +31,7 @@ export default function Form() {
                     <h2 className="text-black sm:text-4xl text-3xl mb-2 font-medium title-font">Contact Me!</h2>
                     <div className="relative mb-4">
                         <label htmlFor="name" className="leading-7 text-sm text-gray-800">Name</label>
-                        <input placeholder="Name" type="text" {...register("name", { required: true, maxLength: 20, onChange: e=>setName(e.target.value)} )}  className="w-full rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
+                        <input placeholder="Name" type="text" {...register("name", { required: true, minLength: 3, maxLength: 20, onChange: e=>setName(e.target.value)} )}  className="w-full rounded border border-gray-700 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-900 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"/>
                         {errors.name && <p className="text-error">Invalid Input!</p>}
                     </div>
                     <div className="relative mb-4">
